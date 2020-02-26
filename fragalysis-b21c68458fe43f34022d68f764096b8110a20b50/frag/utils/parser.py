@@ -78,6 +78,7 @@ def parse_residues(input_pdbs, input_mol=None, max_dist=10.0):
         # Loop through the residues
         mol = _parse_pdb(input_pdb)
         this_res_dict = _get_res(mol)
+        print(this_res_dict)
         for key in this_res_dict:
             if key in res_dict:
                 res_dict[key].append(res_dict[key])
