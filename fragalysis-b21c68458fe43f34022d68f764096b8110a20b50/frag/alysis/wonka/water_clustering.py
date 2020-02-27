@@ -1,7 +1,7 @@
 import os
-from frag.utils.rdkit_utils import _get_water_coords
+from get_functions import _get_water_coords
 from rdkit import Chem
-from frag.alysis.run_clustering import cluster_dp
+from cluster_functions import cluster_dp
 
 
 DATA_DIRECTORY = os.path.abspath('data')

@@ -1,9 +1,7 @@
-from frag.alysis.cluster import dp_means
-from frag.utils.parser import parse_ligand_ph4s
-
-PH4_LAMBDA = 1.0
-C_OF_M_LAMBDA = 6.0
-
+import os
+from cluster_functions import cluster_dp
+from parse_functions import _parse_pdb
+from rdkit_functions import parse_ligand_ph4s
 
 def build_type_dict(mol_ph4_list, identifiers):
     type_dict = {}
@@ -19,35 +17,6 @@ def build_type_dict(mol_ph4_list, identifiers):
             else:
                 type_dict[ph4_type] = {"coords": [(x, y, z)], "mols": [identifiers[i]]}
     return type_dict
-
-
-def map_cluster(dp_means_cluster, mol_id_list):
-    """
-
-    :param dp_means_cluster:
-    :param mol_id_list:
-    :return:
-    """
-    out_dict = {}
-    for cluster in dp_means_cluster.clusters:
-        out_dict[cluster] = {
-            "centre_of_mass": dp_means_cluster.clusters[cluster],
-            "mol_ids": [],
-        }
-    for i, cluster_id in enumerate(dp_means_cluster.dataClusterId):
-        out_dict[cluster_id]["mol_ids"].append(mol_id_list[i])
-    return out_dict
-
-
-def cluster_dp(vect_list, lam, mol_list):
-    """
-    Perform a DP Means clustering.
-    :param vect_list: a list of lists of vectors
-    :param lam: the clustering parameters
-    :param mol_list: the molecular identifers in the same order as the list of vectors
-    :return: a dictionary of the form {cluster_id: {centre_of_mass: (x,y,z), mol_ids: [1,5,12]}}
-    """
-    return map_cluster(dp_means(vect_list, lam), mol_list)
 
 
 def run_lig_cluster(mols, identifiers):
@@ -79,3 +48,19 @@ def run_lig_cluster(mols, identifiers):
             )
     print('clustered')
     return clusters
+
+
+DATA_DIRECTORY = os.path.abspath('data')
+print('directory: ', DATA_DIRECTORY)
+
+for dir in os.listdir(DATA_DIRECTORY):
+    print('dir: ', dir)
+    mols = []
+    identifiers = []
+    for file in os.listdir(os.path.join(DATA_DIRECTORY, dir)):
+        print('file: ', file)
+        mols.append(_parse_pdb(os.path.join(DATA_DIRECTORY, dir, file)))
+        identifiers.append(str(file))
+    print('out of loop')
+    output = run_lig_cluster(mols, identifiers)
+    print('wonka: ', output)

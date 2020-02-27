@@ -168,3 +168,31 @@ def dp_means(data, lamb):
     dp = DPMeans(data, lamb, 0, False)
     dp.run()
     return dp
+
+def map_cluster(dp_means_cluster, mol_id_list):
+    """
+
+    :param dp_means_cluster:
+    :param mol_id_list:
+    :return:
+    """
+    out_dict = {}
+    for cluster in dp_means_cluster.clusters:
+        out_dict[cluster] = {
+            "centre_of_mass": dp_means_cluster.clusters[cluster],
+            "mol_ids": [],
+        }
+    for i, cluster_id in enumerate(dp_means_cluster.dataClusterId):
+        out_dict[cluster_id]["mol_ids"].append(mol_id_list[i])
+    return out_dict
+
+
+def cluster_dp(vect_list, lam, mol_list):
+    """
+    Perform a DP Means clustering.
+    :param vect_list: a list of lists of vectors
+    :param lam: the clustering parameters
+    :param mol_list: the molecular identifers in the same order as the list of vectors
+    :return: a dictionary of the form {cluster_id: {centre_of_mass: (x,y,z), mol_ids: [1,5,12]}}
+    """
+    return map_cluster(dp_means(vect_list, lam), mol_list)
