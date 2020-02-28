@@ -1,5 +1,4 @@
 import os
-from get_functions import _get_water_coords
 from rdkit import Chem
 from cluster_functions import cluster_dp
 import json
@@ -18,7 +17,6 @@ for dir in os.listdir(DATA_DIRECTORY):
         waters = [x for x in pdb if x[17:20] == "HOH" and x.startswith("HETATM")]
         rd_waters = [Chem.MolFromPDBBlock(i) for i in waters]
         print(file, rd_waters)
-        #coords = _get_water_coords(waters)
         for i in rd_waters:
             conf = i.GetConformer()
             for j in range(i.GetNumAtoms()):

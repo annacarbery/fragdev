@@ -1,11 +1,15 @@
 import os
 from cluster_functions import cluster_dp
-from parse_functions import _parse_pdb
 from rdkit_functions import parse_ligand_ph4s
 import json
+from rdkit import Chem
 
 PH4_LAMBDA = 2.0
 C_OF_M_LAMBDA = 6.0
+
+
+def _parse_pdb(data):
+    return Chem.MolFromPDBFile(data)
 
 
 def build_type_dict(mol_ph4_list, identifiers):
