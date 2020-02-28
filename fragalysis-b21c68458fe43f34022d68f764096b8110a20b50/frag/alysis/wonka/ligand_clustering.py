@@ -61,6 +61,8 @@ RESULTS_DIRECTORY = os.path.abspath('results')
 print('directory: ', DATA_DIRECTORY)
 
 for dir in os.listdir(DATA_DIRECTORY):
+    if dir not in os.listdir(RESULTS_DIRECTORY):
+        os.makedirs(os.path.join(RESULTS_DIRECTORY, dir))
     print('dir: ', dir)
     mols = []
     identifiers = []
@@ -71,5 +73,4 @@ for dir in os.listdir(DATA_DIRECTORY):
     print('out of loop')
     output = run_lig_cluster(mols, identifiers)
     print('wonka: ', output)
-
-json.dump(output, open(os.path.join(RESULTS_DIRECTORY, 'ligand_cluster'), 'w'))
+    json.dump(output, open(os.path.join(RESULTS_DIRECTORY, dir, 'ligand_cluster.json'), 'w'))

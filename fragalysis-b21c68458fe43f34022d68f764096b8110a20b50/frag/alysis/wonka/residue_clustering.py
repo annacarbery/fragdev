@@ -1,7 +1,9 @@
 import os
 from cluster_functions import cluster_dp
+import json
 
 DATA_DIRECTORY = os.path.abspath('data')
+RESULTS_DIRECTORY = os.path.abspath('results')
 
 def get_res(pdb):
     res_num = []
@@ -32,6 +34,8 @@ def get_res(pdb):
 
 
 for dir in os.listdir(DATA_DIRECTORY):
+    if dir not in os.listdir(RESULTS_DIRECTORY):
+        os.makedirs(os.path.join(RESULTS_DIRECTORY, dir))
     coms = {}
     idents = []
     lam = 2.5
@@ -46,4 +50,5 @@ for dir in os.listdir(DATA_DIRECTORY):
             vectors.append(coms[j][i])
         clusters = cluster_dp(vectors, lam, idents)
         print(len(clusters), clusters)
+    json.dump(clusters, open(os.path.join(RESULTS_DIRECTORY, dir, 'residue_clusters.json'), 'w'))
 
