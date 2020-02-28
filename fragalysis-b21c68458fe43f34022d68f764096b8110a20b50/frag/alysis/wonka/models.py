@@ -9,7 +9,7 @@ class Project(models.Model):
     title = models.CharField(max_length=200,unique=True)
     # The date it was made
     init_date = models.DateTimeField(auto_now_add=True)
-    
+
 
 class Target(models.Model):
     """A Django model to define a given protein target"""
