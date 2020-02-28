@@ -155,5 +155,42 @@ def _get_res(mol):
     return out_dict
 
 
+def get_res(pdb_block, chain=None):
+    """"Script to get the residues out of the pdb information"""
+    my_d = {}
+    for line in pdb_block:
+        if line[:4] != "ATOM":
+            continue
+        line = line.strip()
+        if chain:
+            if line[21].strip() != chain:
+                continue
+        res_name = line[17:20].strip()
+        res_num = line[22:26].strip()
+        my_res = res_name + str(res_num)
+        if my_res not in my_d:
+            my_d[my_res] = [line]
+        else:
+            my_d[my_res].append(line)
+    out_d = {}
+    for res in my_d:
+        out_d[res] = Chem.MolFromPDBBlock("\n".join(my_d[res]))
+    return out_d
+
+
+def get_all_coords(rdmol):
+    """Function to get all the coordinates for an RDMol
+    Returns three lists"""
+    conf = rdmol.GetConformer()
+    x_coords = []
+    y_coords = []
+    z_coords = []
+    for atm in rdmol.GetAtoms():
+        x_coords.append(conf.GetAtomPosition(atm.GetIdx()).x)
+        y_coords.append(conf.GetAtomPosition(atm.GetIdx()).y)
+        z_coords.append(conf.GetAtomPosition(atm.GetIdx()).z)
+    return x_coords, y_coords, z_coords
+
+
 PH4_LAMBDA = 1.0
 C_OF_M_LAMBDA = 6.0

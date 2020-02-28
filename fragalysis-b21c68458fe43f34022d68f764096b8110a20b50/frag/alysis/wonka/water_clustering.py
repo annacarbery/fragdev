@@ -2,10 +2,11 @@ import os
 from get_functions import _get_water_coords
 from rdkit import Chem
 from cluster_functions import cluster_dp
+import json
 
 
 DATA_DIRECTORY = os.path.abspath('data')
-
+RESULTS_DIRECTORY = os.path.abspath('results')
 
 for dir in os.listdir(DATA_DIRECTORY):
     out_list = []
@@ -27,3 +28,4 @@ for dir in os.listdir(DATA_DIRECTORY):
 for i in clusters:
     print(i, len(clusters[i]['mol_ids']), clusters[i])
 
+json.dump(clusters, open(os.path.join(RESULTS_DIRECTORY, 'water_cluster'), 'w'))

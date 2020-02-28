@@ -2,6 +2,12 @@ import os
 from cluster_functions import cluster_dp
 from parse_functions import _parse_pdb
 from rdkit_functions import parse_ligand_ph4s
+import json
+
+#PH4_LAMBDA = 1.0
+PH4_LAMBDA = 2.0
+C_OF_M_LAMBDA = 6.0
+
 
 def build_type_dict(mol_ph4_list, identifiers):
     type_dict = {}
@@ -51,6 +57,7 @@ def run_lig_cluster(mols, identifiers):
 
 
 DATA_DIRECTORY = os.path.abspath('data')
+RESULTS_DIRECTORY = os.path.abspath('results')
 print('directory: ', DATA_DIRECTORY)
 
 for dir in os.listdir(DATA_DIRECTORY):
@@ -64,3 +71,5 @@ for dir in os.listdir(DATA_DIRECTORY):
     print('out of loop')
     output = run_lig_cluster(mols, identifiers)
     print('wonka: ', output)
+
+json.dump(output, open(os.path.join(RESULTS_DIRECTORY, 'ligand_cluster'), 'w'))
