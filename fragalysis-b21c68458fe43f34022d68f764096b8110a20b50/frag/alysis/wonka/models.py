@@ -1,4 +1,8 @@
 import uuid
+from django.conf import settings
+settings.configure(DEBUG=True)
+import django
+django.setup()
 from django.db import models
 
 
