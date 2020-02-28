@@ -1,45 +1,49 @@
 import os
-from parse_functions import parse_residues
-from residue_functions import find_targ_rmsd
-
+from cluster_functions import cluster_dp
 
 DATA_DIRECTORY = os.path.abspath('data')
 
+def get_res(pdb):
+    res_num = []
+    all_res = {}
+    for line in pdb:
+        if line.startswith('ATOM'):
+            res_num.append(int(line[23:26]))
+    for i in range(min(res_num), max(res_num)+1):
+        x = 0
+        y = 0
+        z = 0
+        n = 0
+        for line in pdb:
+            if line.startswith('ATOM'):
+                if int(line[23:26]) == i:
+                    residue = line[17:26]
+                    x += float(line[30:38].strip())
+                    y += float(line[38:46].strip())
+                    z += float(line[46:54].strip())
+                    n += 1
+        try:
+            all_res[residue] = [x/n, y/n, z/n]
+        except ZeroDivisionError:
+            pass
+    return all_res
+
+
+
 
 for dir in os.listdir(DATA_DIRECTORY):
-    pdb_files = []
+    coms = {}
+    idents = []
+    lam = 2.5
     for file in os.listdir(os.path.join(DATA_DIRECTORY, dir)):
-        pdb = os.path.join(DATA_DIRECTORY, dir, file)
-        pdb_files.append(pdb)
-        new = find_targ_rmsd(pdb)
-
-
-
-    #residues = parse_residues(pdb_files)
-    # clusters = {}
-    # for i in residues:
-    #     this_residue_cluster = {}
-    #     clusters[i.object_list[0].object_desc] = []
-    #     for j in range(len(i.object_list[0].value_array)):
-    #         this_residue_cluster[j] = [j]
-    #         for k in range(len(i.object_list[0].value_array[j])):
-    #             if i.object_list[0].value_array[j][k] < 2.5:
-    #                 if j in this_residue_cluster:
-    #                     if k < j:
-    #                         this_residue_cluster[j].append(k)
-    #                     else:
-    #                         this_residue_cluster[j].append(k+1)
-    #     if sum([len(this_residue_cluster[i]) for i in this_residue_cluster]) / 15 == 15.0:
-    #        # print(i.object_list[0].object_desc, 'all in same cluster')
-    #         clusters[i.object_list[0].object_desc].append(this_residue_cluster[0])
-    #     else:
-    #         for n in range(len(this_residue_cluster)):
-    #             for m in range(len(this_residue_cluster)):
-    #                 if sorted(this_residue_cluster[n]) == sorted(this_residue_cluster[m]):
-    #                     if sorted(this_residue_cluster[n]) not in clusters[i.object_list[0].object_desc]:
-    #                         clusters[i.object_list[0].object_desc].append(sorted(this_residue_cluster[n]))
-    # for i in clusters:
-    #     print(i, clusters[i])
-    #
-
+        pdb = open(os.path.join(DATA_DIRECTORY, dir, file), 'r').readlines()
+        coms[file] = get_res(pdb)
+        idents.append(file)
+    for i in coms[idents[0]]:
+        print(i)
+        vectors = []
+        for j in coms:
+            vectors.append(coms[j][i])
+        clusters = cluster_dp(vectors, lam, idents)
+        print(len(clusters), clusters)
 

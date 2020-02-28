@@ -4,6 +4,20 @@ settings.configure(DEBUG=True)
 import django
 django.setup()
 from django.db import models
+import defaultsettings as ps
+__My_l = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Uncomment the next line to enable the admin:
+    'django.contrib.admin',
+    # Uncomment the next line to enable admin documentation:
+    'django.contrib.admindocs',
+]
+__My_l.extend(ps.extra_apps)
 
 
 class Project(models.Model):
