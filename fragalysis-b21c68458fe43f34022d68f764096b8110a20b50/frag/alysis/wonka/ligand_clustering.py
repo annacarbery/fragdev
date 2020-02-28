@@ -4,7 +4,6 @@ from parse_functions import _parse_pdb
 from rdkit_functions import parse_ligand_ph4s
 import json
 
-#PH4_LAMBDA = 1.0
 PH4_LAMBDA = 2.0
 C_OF_M_LAMBDA = 6.0
 

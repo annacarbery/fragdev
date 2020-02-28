@@ -1,6 +1,7 @@
 import os
 from cluster_functions import cluster_dp
 import json
+import time
 
 DATA_DIRECTORY = os.path.abspath('data')
 RESULTS_DIRECTORY = os.path.abspath('results')
@@ -44,11 +45,13 @@ for dir in os.listdir(DATA_DIRECTORY):
         coms[file] = get_res(pdb)
         idents.append(file)
     for i in coms[idents[0]]:
-        print(i)
+        print('clustering', i)
         vectors = []
         for j in coms:
             vectors.append(coms[j][i])
         clusters = cluster_dp(vectors, lam, idents)
-        print(len(clusters), clusters)
     json.dump(clusters, open(os.path.join(RESULTS_DIRECTORY, dir, 'residue_clusters.json'), 'w'))
+    time.sleep(1)
+    print('clustered and saved')
+
 
