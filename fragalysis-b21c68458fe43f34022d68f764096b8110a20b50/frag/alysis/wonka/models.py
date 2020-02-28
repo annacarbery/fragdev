@@ -2,6 +2,27 @@ import uuid
 from django.db import models
 
 
+class Project(models.Model):
+    """A django model to define a given project_id. Not currently used.
+    Could be used to define certain attributes."""
+    # The title of the project_id -> userdefined
+    title = models.CharField(max_length=200,unique=True)
+    # The date it was made
+    init_date = models.DateTimeField(auto_now_add=True)
+    
+
+class Target(models.Model):
+    """A Django model to define a given protein target"""
+    # The title of the project_id -> userdefined
+    title = models.CharField(unique=True, max_length=200)
+    # The date it was made
+    init_date = models.DateTimeField(auto_now_add=True)
+    # A field to link projects and targets together
+    project_id = models.ManyToManyField(Project, null=True)
+    # Indicates the uniprot_id id for the target. Is a unique key
+    uniprot_id = models.CharField(max_length=100, null=True)
+
+
 class ResShift(models.Model):
     """Model to store residue shift information"""
     # The target it relates to
@@ -16,27 +37,6 @@ class ResShift(models.Model):
     avg_shift = models.FloatField(null=True)
     # The min shift for this residue
     min_shift = models.FloatField(null=True)
-
-
-class Project(models.Model):
-    """A django model to define a given project_id. Not currently used.
-    Could be used to define certain attributes."""
-    # The title of the project_id -> userdefined
-    title = models.CharField(max_length=200,unique=True)
-    # The date it was made
-    init_date = models.DateTimeField(auto_now_add=True)
-
-
-class Target(models.Model):
-    """A Django model to define a given protein target"""
-    # The title of the project_id -> userdefined
-    title = models.CharField(unique=True, max_length=200)
-    # The date it was made
-    init_date = models.DateTimeField(auto_now_add=True)
-    # A field to link projects and targets together
-    project_id = models.ManyToManyField(Project, null=True)
-    # Indicates the uniprot_id id for the target. Is a unique key
-    uniprot_id = models.CharField(max_length=100, null=True)
 
 
 class Protein(models.Model):
