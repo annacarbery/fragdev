@@ -59,11 +59,9 @@ def run_lig_cluster(mols, identifiers):
     return clusters
 
 
-DATA_DIRECTORY = os.path.abspath('data')
-RESULTS_DIRECTORY = os.path.abspath('results')
-print('directory: ', DATA_DIRECTORY)
-
-for dir in os.listdir(DATA_DIRECTORY):
+def cluster(DATA_DIRECTORY, RESULTS_DIRECTORY):
+ #   for dir in os.listdir(DATA_DIRECTORY):
+    dir = 'Mpro_allPdb_06-Mar-2020'
     if dir not in os.listdir(RESULTS_DIRECTORY):
         os.makedirs(os.path.join(RESULTS_DIRECTORY, dir))
     print('dir: ', dir)
@@ -77,3 +75,9 @@ for dir in os.listdir(DATA_DIRECTORY):
     output = run_lig_cluster(mols, identifiers)
     print('wonka: ', output)
     json.dump(output, open(os.path.join(RESULTS_DIRECTORY, dir, 'ligand_cluster.json'), 'w'))
+
+
+DATA_DIRECTORY = os.path.abspath('data')
+RESULTS_DIRECTORY = os.path.abspath('results')
+
+cluster(DATA_DIRECTORY, RESULTS_DIRECTORY)
